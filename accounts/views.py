@@ -84,22 +84,22 @@ def cadastro(request):
 def dashboard(request):
     if request.method != 'POST':
         form = FormContato()
-        return render(request, 'accounts/dashboard.html')
-    
+        return render(request, 'accounts/dashboard.html', {'form': form})
+
     form = FormContato(request.POST, request.FILES)
-    
+
     if not form.is_valid():
         messages.error(request, 'Erro ao enviar formulário.')
         form = FormContato(request.POST)
-        return render(request, 'accounts/dashboard.html')
-    
+        return render(request, 'accounts/dashboard.html', {'form': form})
+
     descricao = request.POST.get('descricao')
-    
+
     if len(descricao) < 5:
         messages.error(request, 'Descrição precisa ter mais que 5 caracteres.')
         form = FormContato(request.POST)
         return render(request, 'accounts/dashboard.html', {'form': form})
-    
+
     form.save()
     messages.success(request, f'Contato {request.POST.get("nome")} salvo com sucesso!')
     return redirect('dashboard')
